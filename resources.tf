@@ -54,18 +54,11 @@ resource "aws_security_group" "botany-sg" {
         cidr_blocks = ["${chomp(data.http.myip.body)}/32"]
     }
     ingress {
-        description = "inbound http"
-        from_port   = 80
-        to_port     = 80
-        protocol    = "tcp"
-        cidr_blocks = ["${chomp(data.http.myip.body)}/32"]
-    }
-    ingress {
-        description = "inbound http"
+        description = "inbound psql"
         from_port   = 5432
         to_port     = 5432
         protocol    = "tcp"
-        cidr_blocks = ["${chomp(data.http.myip.body)}/32"]
+        cidr_blocks = ["0.0.0.0/0"]
     }
     egress {
         from_port   = 0
@@ -103,10 +96,46 @@ resource "aws_instance" "botany-psql-server" {
         user = "ec2-user"
         private_key = tls_private_key.botany-sshkey.private_key_pem
     }
+    
+    provisioner "file" {
+        source      = "postgres_initialize.sh"
+        destination = "/tmp/postgres_initialize.sh"
+    }
+
     provisioner "remote-exec" {
         inline = [
-            "sudo echo 'host all all ${chomp(data.http.myip.body)}/32 trust' >> /jet/etc/postgresql/pg_hba.conf",
-            "/jet/etc/postgresql/init.d/postgresql restart"
+            "chmod +x /tmp/postgres_initialize.sh",
+            "/tmp/postgres_initialize.sh ${var.db_Administrator_password}",
         ]
     }
+}
+
+
+/*  Un comment this to force remote-exec.
+    In a future will be replaced with Ansible.
+resource "null_resource" "cluster" {
+    # Changes to any instance of the cluster requires re-provisioning
+    triggers = {
+        cluster_instance_ids = aws_instance.botany-psql-server.id
+    }
+
+    # Bootstrap script can run on any instance of the cluster
+    # So we just choose the first in this case
+    connection {
+        host = aws_instance.botany-psql-server.public_ip
+        user = "ec2-user"
+        private_key = tls_private_key.botany-sshkey.private_key_pem
+    }
+
+    provisioner "file" {
+        source      = "postgres_initialize.sh"
+        destination = "/tmp/postgres_initialize.sh"
+    }
+
+    provisioner "remote-exec" {
+        inline = [
+            "chmod +x /tmp/postgres_initialize.sh",
+            "/tmp/postgres_initialize.sh ${var.db_Administrator_password}",
+        ]
+    } */
 }

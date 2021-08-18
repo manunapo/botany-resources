@@ -11,7 +11,7 @@ variable "availability_zone" {
 }
 
 variable "instance_type" {
-  default = "t2.nano"
+  default = "t2.micro"
 }
 
 variable "instance_count" {
@@ -25,6 +25,8 @@ variable "key_name" {
 variable "ami" {
   default = "ami-9391e585"
 }
+
+variable "db_Administrator_password" {}
 
 variable "vpc_CIDR_block" {
     default = "10.0.0.0/16"
