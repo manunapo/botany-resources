@@ -3,6 +3,7 @@
 1. Install terraform https://www.terraform.io/downloads.html
 
 2. Add to ~/.aws/config a "personal" profile with your aws account data:
+
     [profile personal]
     region=us-east-1
     aws_access_key_id = 
