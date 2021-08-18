@@ -4,13 +4,10 @@
 
 2. Add to ~/.aws/config a "personal" profile with your aws account data:
 
-    [profile personal]
-    
-    region=us-east-1
-    
-    aws_access_key_id = 
-    
-    aws_secret_access_key = 
+    > `[profile personal]`
+    > `region=us-east-1`
+    > `aws_access_key_id = `
+    > `aws_secret_access_key = `
 
 3. Subscribe to AWS ami "ami-9391e585".
 
