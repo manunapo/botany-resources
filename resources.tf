@@ -105,7 +105,7 @@ resource "aws_instance" "botany-psql-server" {
     provisioner "remote-exec" {
         inline = [
             "chmod +x /tmp/postgres_initialize.sh",
-            "/tmp/postgres_initialize.sh ${var.db_Administrator_password}",
+            "/tmp/postgres_initialize.sh ${var.db_Administrator_password}"
         ]
     }
 }
@@ -135,7 +135,8 @@ resource "null_resource" "cluster" {
     provisioner "remote-exec" {
         inline = [
             "chmod +x /tmp/postgres_initialize.sh",
-            "/tmp/postgres_initialize.sh ${var.db_Administrator_password}",
+            "/tmp/postgres_initialize.sh ${var.db_Administrator_password}"
         ]
-    } */
+    } 
 }
+*/
